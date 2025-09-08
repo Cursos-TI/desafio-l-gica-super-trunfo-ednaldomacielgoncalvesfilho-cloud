@@ -1,0 +1,159 @@
+/*
+Desafio Super Trunfo - Países
+Autor: Ednaldo Maciel
+Descrição:
+- Nível Novato: cadastro de cartas de cidades, comparação de um atributo.
+- Nível Aventureiro: menu interativo para escolha de atributo e comparação aninhada.
+- Nível Mestre: comparação de dois atributos simultaneamente com operadores ternários.
+
+Observação: todos os dados são inseridos manualmente pelo usuário via terminal.
+*/
+
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 50
+
+typedef struct {
+    char estado[MAX];
+    int codigo;
+    char nome[MAX];
+    int populacao;
+    float area;
+    double pib;
+    int pontos_turisticos;
+} Carta;
+
+// Função para exibir carta
+void exibir_carta(Carta c) {
+    printf("Codigo: %d\n", c.codigo);
+    printf("Cidade: %s\n", c.nome);
+    printf("Estado: %s\n", c.estado);
+    printf("Populacao: %d\n", c.populacao);
+    printf("Area: %.2f km2\n", c.area);
+    printf("PIB: %.2lf\n", c.pib);
+    printf("Pontos Turisticos: %d\n", c.pontos_turisticos);
+    printf("---------------------------\n");
+}
+
+// Função Novato: comparar um atributo
+void comparar_novato(Carta c1, Carta c2, int atributo) {
+    // atributo: 1-populacao, 2-area, 3-pib, 4-pontos turisticos
+    printf("--- Comparacao Novato ---\n");
+    exibir_carta(c1);
+    exibir_carta(c2);
+
+    if(atributo == 1) { // Populacao
+        if(c1.populacao < c2.populacao) printf("Carta 1 vence (menor populacao)\n");
+        else if(c1.populacao > c2.populacao) printf("Carta 2 vence (menor populacao)\n");
+        else printf("Empate na populacao\n");
+    } else if(atributo == 2) { // Area
+        if(c1.area > c2.area) printf("Carta 1 vence (maior area)\n");
+        else if(c1.area < c2.area) printf("Carta 2 vence (maior area)\n");
+        else printf("Empate na area\n");
+    } else if(atributo == 3) { // PIB
+        if(c1.pib > c2.pib) printf("Carta 1 vence (maior PIB)\n");
+        else if(c1.pib < c2.pib) printf("Carta 2 vence (maior PIB)\n");
+        else printf("Empate no PIB\n");
+    } else if(atributo == 4) { // Pontos Turisticos
+        if(c1.pontos_turisticos > c2.pontos_turisticos) printf("Carta 1 vence (mais pontos turisticos)\n");
+        else if(c1.pontos_turisticos < c2.pontos_turisticos) printf("Carta 2 vence (mais pontos turisticos)\n");
+        else printf("Empate nos pontos turisticos\n");
+    }
+    printf("\n");
+}
+
+// Função Aventureiro: menu interativo para comparação
+void comparar_aventureiro(Carta c1, Carta c2) {
+    int opcao;
+    printf("--- Comparacao Aventureiro ---\n");
+    printf("Escolha o atributo para comparar:\n");
+    printf("1 - Populacao\n2 - Area\n3 - PIB\n4 - Pontos Turisticos\n");
+    scanf("%d", &opcao);
+
+    switch(opcao) {
+        case 1:
+            (c1.populacao < c2.populacao) ? printf("Carta 1 vence\n") : (c1.populacao > c2.populacao) ? printf("Carta 2 vence\n") : printf("Empate\n");
+            break;
+        case 2:
+            (c1.area > c2.area) ? printf("Carta 1 vence\n") : (c1.area < c2.area) ? printf("Carta 2 vence\n") : printf("Empate\n");
+            break;
+        case 3:
+            (c1.pib > c2.pib) ? printf("Carta 1 vence\n") : (c1.pib < c2.pib) ? printf("Carta 2 vence\n") : printf("Empate\n");
+            break;
+        case 4:
+            (c1.pontos_turisticos > c2.pontos_turisticos) ? printf("Carta 1 vence\n") : (c1.pontos_turisticos < c2.pontos_turisticos) ? printf("Carta 2 vence\n") : printf("Empate\n");
+            break;
+        default:
+            printf("Opcao invalida\n");
+    }
+    printf("\n");
+}
+
+// Função Mestre: comparar dois atributos simultaneamente
+void comparar_mestre(Carta c1, Carta c2) {
+    int op1, op2;
+    printf("--- Comparacao Mestre ---\n");
+    printf("Escolha o primeiro atributo (1-Populacao,2-Area,3-PIB,4-Pontos Turisticos): ");
+    scanf("%d", &op1);
+    printf("Escolha o segundo atributo: ");
+    scanf("%d", &op2);
+
+    int v1=0, v2=0;
+
+    // Primeiro atributo
+    v1 += (op1==1) ? ((c1.populacao < c2.populacao)?1:(c1.populacao>c2.populacao)?0:0) :
+          (op1==2) ? ((c1.area > c2.area)?1:(c1.area<c2.area)?0:0) :
+          (op1==3) ? ((c1.pib > c2.pib)?1:(c1.pib<c2.pib)?0:0) :
+          (op1==4) ? ((c1.pontos_turisticos > c2.pontos_turisticos)?1:(c1.pontos_turisticos<c2.pontos_turisticos)?0:0) :0;
+
+    v2 += (op1==1) ? ((c1.populacao < c2.populacao)?0:(c1.populacao>c2.populacao)?1:0) :
+          (op1==2) ? ((c1.area > c2.area)?0:(c1.area<c2.area)?1:0) :
+          (op1==3) ? ((c1.pib > c2.pib)?0:(c1.pib<c2.pib)?1:0) :
+          (op1==4) ? ((c1.pontos_turisticos > c2.pontos_turisticos)?0:(c1.pontos_turisticos<c2.pontos_turisticos)?1:0) :0;
+
+    // Segundo atributo
+    v1 += (op2==1) ? ((c1.populacao < c2.populacao)?1:(c1.populacao>c2.populacao)?0:0) :
+          (op2==2) ? ((c1.area > c2.area)?1:(c1.area<c2.area)?0:0) :
+          (op2==3) ? ((c1.pib > c2.pib)?1:(c1.pib<c2.pib)?0:0) :
+          (op2==4) ? ((c1.pontos_turisticos > c2.pontos_turisticos)?1:(c1.pontos_turisticos<c2.pontos_turisticos)?0:0) :0;
+
+    v2 += (op2==1) ? ((c1.populacao < c2.populacao)?0:(c1.populacao>c2.populacao)?1:0) :
+          (op2==2) ? ((c1.area > c2.area)?0:(c1.area<c2.area)?1:0) :
+          (op2==3) ? ((c1.pib > c2.pib)?0:(c1.pib<c2.pib)?1:0) :
+          (op2==4) ? ((c1.pontos_turisticos > c2.pontos_turisticos)?0:(c1.pontos_turisticos<c2.pontos_turisticos)?1:0) :0;
+
+    if(v1 > v2) printf("Carta 1 vence na comparacao dos dois atributos\n");
+    else if(v1 < v2) printf("Carta 2 vence na comparacao dos dois atributos\n");
+    else printf("Empate nos dois atributos\n");
+
+    printf("\n");
+}
+
+int main() {
+    Carta carta1, carta2;
+
+    printf("Cadastro da Carta 1:\n");
+    printf("Nome da cidade: "); scanf("%s", carta1.nome);
+    printf("Estado: "); scanf("%s", carta1.estado);
+    printf("Codigo: "); scanf("%d", &carta1.codigo);
+    printf("Populacao: "); scanf("%d", &carta1.populacao);
+    printf("Area: "); scanf("%f", &carta1.area);
+    printf("PIB: "); scanf("%lf", &carta1.pib);
+    printf("Pontos Turisticos: "); scanf("%d", &carta1.pontos_turisticos);
+
+    printf("\nCadastro da Carta 2:\n");
+    printf("Nome da cidade: "); scanf("%s", carta2.nome);
+    printf("Estado: "); scanf("%s", carta2.estado);
+    printf("Codigo: "); scanf("%d", &carta2.codigo);
+    printf("Populacao: "); scanf("%d", &carta2.populacao);
+    printf("Area: "); scanf("%f", &carta2.area);
+    printf("PIB: "); scanf("%lf", &carta2.pib);
+    printf("Pontos Turisticos: "); scanf("%d", &carta2.pontos_turisticos);
+
+    comparar_novato(carta1, carta2, 1); // exemplo: comparar populacao
+    comparar_aventureiro(carta1, carta2);
+    comparar_mestre(carta1, carta2);
+
+    return 0;
+}
